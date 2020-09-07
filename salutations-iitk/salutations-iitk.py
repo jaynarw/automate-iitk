@@ -115,7 +115,7 @@ for course in answers['course_list']:
     'uid':cookies['uid'],
     'token':cookies['token'],
   }).content)
-  folder = re.sub(r'[\/]', ' - ',courseNames[course])
+  folder = re.sub(r'[\\\/:*?"<>|]',' - ', courseNames[course])
 
   weekIdx = 0
   topicIdx = 0
@@ -137,6 +137,8 @@ for course in answers['course_list']:
   for (idx, resource) in enumerate(data,1):
     week = resource['week']
     topic = resource['topic']
+    week = re.sub(r'[\\\/:*?"<>|]',' - ', week)
+    topic = re.sub(r'[\\\/:*?"<>|]',' - ', topic)
     if week not in courseData:
       courseData[week] = []
       weekIdx += 1
@@ -165,6 +167,3 @@ for course in answers['course_list']:
         print('Downloading ' + file['fileName'] + ' [' + str(idx) + '/' + str(totalDownloads) + ']' )
         download(file['fileURL'], str(fileIdx) + '_' + file['fileName'], folder, week, str(topicIdx) + '_' + topic)
   
-
-      
-
