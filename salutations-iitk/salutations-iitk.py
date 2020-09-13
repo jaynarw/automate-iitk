@@ -123,13 +123,14 @@ for course in answers['course_list']:
   fileIdx = 0
   totalVids = 0
   totalPDFs = 0
-  totalDownloads = len(data)
+  currIdx = 0
   courseData = {}
   for resource in data:
     if (resource['videoURL'] != None):
       totalVids += 1
-    totalVids += len(resource['videosUploaded'])
+    totalVids += len([v for v in resource['videosUploaded'] if v['type'] == 'original'])
     totalPDFs += len(resource['resources'])
+  totalDownloads = totalPDFs + totalVids
   if answers['type'] == 'PDFs':
     totalDownloads = totalPDFs
   if answers['type'] == 'Videos':
@@ -153,17 +154,19 @@ for course in answers['course_list']:
     if(answers['type'] != 'PDFs'):
       if resource['videoURL'] != None:
         videoIdx = videoIdx + 1
+        currIdx += 1
         os.makedirs(os.path.join(folder, week, str(topicIdx) + '_' + topic ), exist_ok=True)
         file = open(os.path.join(folder, week, str(topicIdx) + '_' + topic, str(videoIdx) + '_' + resource['title'] + '.' + 'html'), 'w+')
         file.write(videoHTML(resource['videoURL']))
         file.close()
-      for video in resource['videosUploaded']:
+      for video in [v for v in resource['videosUploaded'] if v['type'] == 'original']:
         videoIdx = videoIdx + 1
-        print('Downloading ' + resource['title'] + ' [' + str(idx) + '/' + str(totalDownloads) + ']' )
+        currIdx += 1
+        print('Downloading ' + resource['title'] + ' [' + str(currIdx) + '/' + str(totalDownloads) + ']' )
         download(video['path'], str(videoIdx) + '_' + resource['title'] + '.' + video['path'].split('.')[-1], folder, week, str(topicIdx) + '_' + topic)
     if(answers['type'] != 'Videos'):
       for file in resource['resources']:
+        currIdx += 1
         fileIdx = fileIdx + 1
-        print('Downloading ' + file['fileName'] + ' [' + str(idx) + '/' + str(totalDownloads) + ']' )
+        print('Downloading ' + file['fileName'] + ' [' + str(currIdx) + '/' + str(totalDownloads) + ']' )
         download(file['fileURL'], str(fileIdx) + '_' + file['fileName'], folder, week, str(topicIdx) + '_' + topic)
-  
