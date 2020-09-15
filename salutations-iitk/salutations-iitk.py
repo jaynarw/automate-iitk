@@ -276,7 +276,7 @@ for course in answers['course_list']:
     topicFolderName = purify_name('{}_{}'.format(idx, topic['title']))
     os.makedirs(os.path.join(folder, 'Resources', topicFolderName), exist_ok=True)
     for (resIdx, resource) in enumerate(topic['resources'], 1):
-      if skip(folder, 'Resources', topicFolderName, file_data[0]):
+      if skip(folder, 'Resources', topicFolderName, resource['fileName']):
         curr_idx+=1
         continue
       print('Downloading ' + resource['fileName'] + ' [' + str(curr_idx) + '/' + str(totalDownloads) + ']' )
