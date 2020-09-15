@@ -199,7 +199,17 @@ for course in answers['course_list']:
     'uid':cookies['uid'],
     'token':cookies['token'],
   }).content)
+  resourceURL = 'https://hello.iitk.ac.in/api/' + course + '/resources'
+  resourceData = json.loads(r.get(resourceURL, headers={
+    'uid':cookies['uid'],
+    'token':cookies['token'],
+  }).content)
   folder = re.sub(r'[\\\/:*?"<>|]',' - ', courseNames[course])
+
+  ## Calculating Resources
+  totalResources = 0
+  for topic in resourceData:
+    totalResources += len(topic['resources'])
   temp = []
   totalVids = 0
   totalPDFs = 0
@@ -231,11 +241,11 @@ for course in answers['course_list']:
           "topic": lecture['topic'],
           "lectures": list([lecture])
         })
-  totalDownloads = totalPDFs + totalVids
+  totalDownloads = totalPDFs + totalVids + totalResources
   if answers['type'] == 'PDFs':
-    totalDownloads = totalPDFs
+    totalDownloads -= totalVids
   if answers['type'] == 'Videos':
-    totalDownloads = totalVids
+    totalDownloads = totalPDFs
   formatted_data = courseToDirectory(temp, minified=False)
   curr_idx = 1
   for week in formatted_data:
@@ -262,7 +272,16 @@ for course in answers['course_list']:
           print('Downloading ' + file_data[0] + ' [' + str(curr_idx) + '/' + str(totalDownloads) + ']' )
           download(file_data[1], file_data[0], folder, week, topic)
         curr_idx += 1
-
+  for (idx,topic) in enumerate(resourceData, 1):
+    topicFolderName = purify_name('{}_{}'.format(idx, topic['title']))
+    os.makedirs(os.path.join(folder, 'Resources', topicFolderName), exist_ok=True)
+    for (resIdx, resource) in enumerate(topic['resources'], 1):
+      if skip(folder, 'Resources', topicFolderName, file_data[0]):
+        curr_idx+=1
+        continue
+      print('Downloading ' + resource['fileName'] + ' [' + str(curr_idx) + '/' + str(totalDownloads) + ']' )
+      download(resource['fileURL'], resource['fileName'], folder, 'Resources', topicFolderName)
+      curr_idx+=1
 
   # pprint(pathto_dict(os.path.join(path, folder)))
 # print(pathto_dict(path))
