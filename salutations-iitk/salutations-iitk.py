@@ -123,68 +123,6 @@ def videoHTML(url):
    </body>
 </html>'''.format(url)
 
-# for course in answers['course_list']:
-#   summaryURL = 'https://hello.iitk.ac.in/api/' + course + '/lectures/summary'
-#   data = json.loads(r.get(summaryURL, headers={
-#     'uid':cookies['uid'],
-#     'token':cookies['token'],
-#   }).content)
-#   folder = re.sub(r'[\\\/:*?"<>|]',' - ', courseNames[course])
-
-#   weekIdx = 0
-#   topicIdx = 0
-#   videoIdx = 0
-#   fileIdx = 0
-#   totalVids = 0
-#   totalPDFs = 0
-#   currIdx = 0
-#   courseData = {}
-#   for resource in data:
-    # if (resource['videoURL'] != None):
-    #   totalVids += 1
-    # totalVids += len([v for v in resource['videosUploaded'] if v['type'] == 'original'])
-    # totalPDFs += len(resource['resources'])
-  # totalDownloads = totalPDFs + totalVids
-  # if answers['type'] == 'PDFs':
-  #   totalDownloads = totalPDFs
-  # if answers['type'] == 'Videos':
-  #   totalDownloads = totalVids
-#   for (idx, resource) in enumerate(data,1):
-#     week = resource['week']
-#     topic = resource['topic']
-#     week = re.sub(r'[\\\/:*?"<>|]',' - ', week)
-#     topic = re.sub(r'[\\\/:*?"<>|]',' - ', topic)
-#     if week not in courseData:
-#       courseData[week] = []
-#       weekIdx += 1
-#       topicIdx = 0
-#       videoIdx = 0
-#       fileIdx = 0
-#     if topic not in courseData[week]:
-#       courseData[week].append(topic)
-#       topicIdx = topicIdx + 1
-#       videoIdx = 0
-#       fileIdx = 0
-#     if(answers['type'] != 'PDFs'):
-#       if resource['videoURL'] != None:
-#         videoIdx = videoIdx + 1
-#         currIdx += 1
-        # os.makedirs(os.path.join(folder, week, str(topicIdx) + '_' + topic ), exist_ok=True)
-        # file = open(os.path.join(folder, week, str(topicIdx) + '_' + topic, str(videoIdx) + '_' + resource['title'] + '.' + 'html'), 'w+')
-        # file.write(videoHTML(resource['videoURL']))
-        # file.close()
-#       for video in [v for v in resource['videosUploaded'] if v['type'] == 'original']:
-#         videoIdx = videoIdx + 1
-#         currIdx += 1
-#         print('Downloading ' + resource['title'] + ' [' + str(currIdx) + '/' + str(totalDownloads) + ']' )
-#         download(video['path'], str(videoIdx) + '_' + resource['title'] + '.' + video['path'].split('.')[-1], folder, week, str(topicIdx) + '_' + topic)
-#     if(answers['type'] != 'Videos'):
-#       for file in resource['resources']:
-#         currIdx += 1
-#         fileIdx = fileIdx + 1
-        # print('Downloading ' + file['fileName'] + ' [' + str(currIdx) + '/' + str(totalDownloads) + ']' )
-        # download(file['fileURL'], str(fileIdx) + '_' + file['fileName'], folder, week, str(topicIdx) + '_' + topic)
-
 def courseToDirectory(data, minified=True):
   directory = {}
   for entry in data:
