@@ -148,6 +148,7 @@ def courseToDirectory(data, minified=True):
         for video in lec['videosUploaded']:
           if video['type'] == 'original':
             name = '{}_{}'.format(lecIdx, title) + '.' + video['path'].split('.')[-1]
+            name = purify_name(name)
             if minified:
               directory[week]['{}_{}'.format(topicIdx, topic)].append(name)
             else:
@@ -320,6 +321,7 @@ def courseDirectoryMetadata(data, minified=True):
         for video in lec['videosUploaded']:
           if video['type'] == 'original':
             name = '{}_{}'.format(lecIdx, title) + '.' + video['path'].split('.')[-1]
+            name = purify_name(name)
             if firstVideo == None:
               firstVideo = [week, '{}_{}'.format(topicIdx, topic), name]
             directory[week]['{}_{}'.format(topicIdx, topic)][name] = {
