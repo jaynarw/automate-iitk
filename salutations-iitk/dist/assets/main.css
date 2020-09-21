@@ -1,0 +1,415 @@
+@font-face {
+    font-family: 'NetflixR';
+    src: url(./NetflixSansR.woff2);
+  }
+@font-face {
+font-family: 'NetflixM';
+src: url(./NetflixSansM.woff2);
+}
+* {
+    font-family: 'NetflixR';
+}
+.header {
+    height: 70px;
+    background-color: black;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    padding: 0 4%;
+    display: flex;
+    align-items: center;
+    z-index: 100;
+}
+.cover {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    min-height: 100vh;
+    padding-top: 70px;
+}
+body, html {
+    margin: 0;
+    background-color: black;
+}
+.section-title h1 {
+    font-family: 'NetflixR';
+    font-size: 1.4vw;
+    color: #e5e5e5;
+    font-weight: 700;
+    margin: 0 4% .5em 4%;
+    text-decoration: none;
+    display: inline-block;
+    min-width: 6em;
+    /* cursor: none; */
+    user-select: none;
+}
+
+.container-courses {
+  display: flex;
+  margin-top: 10px;
+  padding: 0 4%;
+}
+
+.item {
+  position: relative;
+  display: block;
+  flex: 1 1 0px;
+  transition: transform 500ms;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.container-courses:focus-within .item,
+.container-courses:hover .item {
+  transform: translateX(-25%);
+}
+
+.item:focus ~ .item,
+.item:hover ~ .item {
+  transform: translateX(25%);
+}
+
+.container-courses .item:focus,
+.container-courses .item:hover {
+  transform: scale(1.5);
+  z-index: 1;
+}
+
+/* body {
+  overflow: hidden;
+} */
+
+.item img {
+  display: block;
+  max-width: 100%;
+}
+#lecture-player {
+    width: 100%;
+    height: calc(92vw * 0.5625);
+}
+.player-container {
+    width: 100vw;
+    padding: 50px 4%;
+    box-sizing: border-box;
+}
+video:focus {
+    outline: none;
+}
+.video-js .vjs-big-play-button {
+    /* top: calc(50% - 0.816em)!important; */
+    /* left: calc(50% - 1.5em)!important; */
+    top: 50%!important;
+    left: 50%!important;
+    transform: translateY(-50%) translateX(-50%)!important;
+    -moz-transform: translateY(-50%) translateX(-50%)!important;
+    -ms-transform: translateY(-50%) translateX(-50%)!important;
+    -webkit-transform: translateY(-50%) translateX(-50%)!important;
+    border: none!important;
+    background-color: #1B1D1F!important;
+    background-color: rgba(27, 29, 31, 0.9)!important;
+}
+
+.video-js .vjs-progress-control .vjs-progress-holder {
+    margin: 0!important;
+}
+.vjs-progress-control.vjs-control {
+    position: absolute!important;
+    display: block!important;
+    /* width: 100%!important; */
+    width: calc(100% - 8em)!important;
+    margin-left: 2em!important;
+    height: 0.3em!important;
+    bottom: 100%!important;
+}
+.video-js .vjs-play-progress:before {
+    color: #e7442e;
+    font-size: 1.7em!important;
+    top: -0.4333333333em!important;
+}
+.video-js .vjs-slider {
+    background-color: rgb(91, 91, 91)!important;
+}
+.video-js .vjs-load-progress {
+    background-color: rgba(255, 255, 255, 0.2)!important;
+}
+.video-js .vjs-play-progress {
+    background: #e50c14!important;
+}
+.video-js .vjs-control-bar {
+    height: 8em!important;
+    background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(66,66,66,0.2) 100%)!important;
+}
+.vjs-icon-placeholder:before {
+    top: 50%!important;
+    transform: translateY(-50%);
+    height: auto!important;
+}
+.vjs-remaining-time {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.vjs-play-control {
+    margin: 0 1.5em 0 1.5em!important;
+}
+.video-js .vjs-volume-panel .vjs-volume-control {
+    top: 50%;
+    transform: translateY(-50%);
+}
+.vjs-button > .vjs-icon-placeholder:before {
+    font-size: 3.6em!important;
+}
+.vjs-remaining-time.vjs-time-control.vjs-control{
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    transform: translateY(calc(50% - 0.2em));
+    font-size: 1.1em!important;
+}
+/* .video-js .vjs-progress-control:hover .vjs-progress-holder {
+    font-size: 1.1em!important;
+} */
+.video-js *:focus {
+    outline: none;
+}
+
+/* .vjs-remaining-time-display {
+    color: rgb(91 91 91 / 1)!important;
+} */
+.video-js .vjs-volume-level {
+    color: #e50c14!important;
+    background: #e50c14!important;
+}
+.vjs-play-control {
+    transition: all 0.2s ease-in!important;
+}
+.vjs-play-control:hover {
+    /* transition: all 0.1s ease-in; */
+    transform: scale(1.2)!important;
+}
+.vjs-picture-in-picture-control {
+    transition: all 0.2s ease-in!important;
+    margin-left: auto!important;
+    margin-right: 1.5em!important;
+}
+.vjs-picture-in-picture-control:hover {
+    /* transition: all 0.1s ease-in; */
+    transform: scale(1.2)!important;
+}
+
+.vjs-fullscreen-control {
+    transition: all 0.2s ease-in!important;
+    margin-left: 1.5em!important;
+    margin-right: 1.5em!important;
+}
+.vjs-fullscreen-control:hover {
+    /* transition: all 0.1s ease-in; */
+    transform: scale(1.2)!important;
+}
+/*
+Fonts
+*/
+@font-face {
+    font-family: 'player-icons';
+    src:  url('fonts/icomoon.eot?pzxm1g');
+    src:  url('fonts/icomoon.eot?pzxm1g#iefix') format('embedded-opentype'),
+      url('fonts/icomoon.ttf?pzxm1g') format('truetype'),
+      url('fonts/icomoon.woff?pzxm1g') format('woff'),
+      url('fonts/icomoon.svg?pzxm1g#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+  
+  .icon-play:before {
+    content: "\31";
+  }
+  .icon-rewind:before {
+    font-family: 'player-icons'!important;
+    content: "\32"!important;
+    font-size: 3.6em!important;
+  }
+  .icon-fwd:before {
+      font-family: 'player-icons'!important;
+    content: "\33"!important;
+    font-size: 3.6em!important;
+  }
+  .icon-volumeMuted:before {
+    content: "\34";
+  }
+  .icon-volumeLow:before {
+    content: "\35";
+  }
+  .icon-volumeMax:before {
+    content: "\37";
+  }
+  .icon-volumeMed:before {
+    content: "\e906";
+  }
+  .icon-nextEpisode:before {
+    font-size: 3.6em!important;
+    font-family: 'player-icons'!important;
+    content: "\38";
+  }
+  .icon-episodes:before {
+    content: "\39";
+  }
+  .icon-fullscreen:before {
+    content: "\30";
+  }
+  .icon-back:before {
+    content: "\63";
+  }
+  .icon-check:before {
+    content: "\64";
+  }
+
+  .flipH {
+      transform: scale(-1, 1);
+  }
+  
+
+  .vjs-icon-play:before, .video-js .vjs-play-control .vjs-icon-placeholder:before, .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
+    content: "\31"!important;
+    font-family: 'player-icons'!important;
+  }
+  .vjs-icon-volume-mute:before, .video-js .vjs-mute-control.vjs-vol-0 .vjs-icon-placeholder:before {
+    content: "\34"!important;
+    font-family: 'player-icons'!important;
+}
+.vjs-icon-volume-low:before, .video-js .vjs-mute-control.vjs-vol-1 .vjs-icon-placeholder:before {
+    content: "\35"!important;
+    font-family: 'player-icons'!important;
+}
+.vjs-icon-volume-mid:before, .video-js .vjs-mute-control.vjs-vol-2 .vjs-icon-placeholder:before {
+    content: "\e906"!important;
+    font-family: 'player-icons'!important;
+}
+.vjs-icon-volume-high:before, .video-js .vjs-mute-control .vjs-icon-placeholder:before {
+    content: "\37"!important;
+    font-family: 'player-icons'!important;
+}
+.vjs-icon-fullscreen-enter:before, .video-js .vjs-fullscreen-control .vjs-icon-placeholder:before {
+    content: "\30"!important;
+    font-family: 'player-icons'!important;
+}
+.vjs-icon-fullscreen-exit:before, .video-js.vjs-fullscreen .vjs-fullscreen-control .vjs-icon-placeholder:before {
+    content: "a"!important;
+    font-family: 'player-icons'!important;
+}
+.vjs-icon-play:before, .video-js .vjs-playing .vjs-icon-placeholder:before{
+    content: "b"!important;
+    font-family: 'player-icons'!important;
+  }
+  .video-js .vjs-control:focus:before, .video-js .vjs-control:hover:before, .video-js .vjs-control:focus {
+    text-shadow: none!important;
+  }
+  .video-js .vjs-volume-panel {
+    margin-left: 1.5em!important;
+}
+.vjs-rewind-control {
+    cursor: pointer;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    transition: all 0.2s ease-in!important;
+}
+.vjs-fwd-control {
+    cursor: pointer;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    transition: all 0.2s ease-in!important;
+}
+.vjs-rewind-control:hover {
+    /* transition: all 0.1s ease-in; */
+    transform: scale(1.2)!important;
+}
+.vjs-prev:hover {
+    /* transition: all 0.1s ease-in; */
+    transform: scale3d(-1.2, 1.2, 1.2)!important;
+}
+.vjs-next:hover {
+    /* transition: all 0.1s ease-in; */
+    transform: scale(1.2)!important;
+}
+.vjs-fwd-control:hover {
+    /* transition: all 0.1s ease-in; */
+    transform: scale(1.2)!important;
+}
+.vjs-lecture-title {
+    font-family: 'NetflixM';
+    margin: 0 1.5em;
+    font-size: 1.3em!important;
+    user-select: none;
+}
+.course-week-list {
+    position: absolute;
+    bottom: 100%;
+    background: #262626;
+    padding: 10px;
+    border-radius: 3px;
+    font-size: 1.3em;
+    display: none;
+    min-height: 400px;
+    max-width: 300px;
+    overflow-y: scroll;
+}
+.week {
+    padding: 10px 15px;
+    min-width: 200px;
+    cursor: pointer;
+}
+.week:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+.vjs-episodes {
+    cursor: pointer!important;
+    margin-left: 1.5em!important;
+    margin-right: 1.5em!important;
+    transition: all 0.2s ease-in!important;
+}
+.vjs-next, .vjs-prev {
+    cursor: pointer!important;
+    margin-left: 1.5em!important;
+    margin-right: 1.5em!important;
+    transition: all 0.2s ease-in!important;
+}
+.vjs-episodes:hover {
+    /* transition: all 0.1s ease-in; */
+    transform: scale(1.2)!important;
+}
+.vjs-episodes:hover .course-week-list {
+    transform: none;
+}
+
+.icon-episodes:before {
+    font-family: 'player-icons'!important;
+    content: "\39"!important;
+    font-size: 3.6em!important;
+  }
+.course-popup-title {
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.3);
+    align-items: center;
+}
+.course-popup-title .title {
+    font-family: 'NetflixM';
+    flex: auto;
+    font-size: 1.2em;
+    user-select: none;
+    padding: 10px 15px;
+}
+.course-popup-title .course-popup-back {
+    flex: none;
+    cursor: pointer;
+    font-family: 'player-icons'!important;
+    font-size: 1.5em;
+}
+.vjs-playback-rate .vjs-playback-rate-value {
+    top: 50%!important;
+    left: 50%!important;
+    transform: translate3d(-50%, -50%, 0px)!important;
+    width: 100%!important;
+    height: auto!important;
+}
