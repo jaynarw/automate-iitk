@@ -389,7 +389,7 @@ for course in answers['course_list']:
     FirstVideos.append(firstVideo)
   Parsed_Data[folder] = metadata
 
-open('resources.js','w').write('const a={};export default a;'.format(json.dumps(Parsed_Data, sort_keys=True)))
+open('resources.js','w').write('const StudyResources={};'.format(json.dumps(Parsed_Data, sort_keys=True)))
 
 import cv2
 threshold = 100
