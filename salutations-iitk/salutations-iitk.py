@@ -8,7 +8,6 @@ import sys
 
 def pathto_dict(path):
   for root, dirs, files in os.walk(path):
-    # tree = {root, "type":"folder", "children":[]}
     tree = {}
     tree[os.path.basename(root)] = [pathto_dict(os.path.join(root, d)) for d in dirs]
     tree[os.path.basename(root)].extend(files)
@@ -218,7 +217,6 @@ for course in answers['course_list']:
       totalVids += 1
     totalVids += len([v for v in res['videosUploaded'] if v['type'] == 'original'])
     totalPDFs += len(res['resources'])
-
     toInsert = True
     for entry in temp:
       if entry['week'] == res['week']:
@@ -283,6 +281,128 @@ for course in answers['course_list']:
       download(resource['fileURL'], resource['fileName'], folder, 'Resources', topicFolderName)
       curr_idx+=1
 
-  # pprint(pathto_dict(os.path.join(path, folder)))
-# print(pathto_dict(path))
-# os.path.join(path, )
+def courseDirectoryMetadata(data, minified=True):
+  directory = {}
+  firstVideo = None
+  prevLec = None
+  # nextLec = None
+  currLec = None
+  for entry in data:
+    week = purify_name(entry["week"])
+    directory[week] = {}
+    for (topicIdx, topicEntry) in enumerate(entry['lectures'], 1):
+      topic = purify_name(topicEntry["topic"])
+      directory[week]['{}_{}'.format(topicIdx, topic)] = {}
+      for (lecIdx, lec) in enumerate(topicEntry['lectures'], 1):
+        currLec = [week, '{}_{}'.format(topicIdx, topic)]
+        for res in lec['resources']:
+          directory[week]['{}_{}'.format(topicIdx, topic)]['{}_{}'.format(lecIdx, res['fileName'])] = {
+            "fileName": '{}_{}'.format(lecIdx, res['fileName']),
+            "type": "pdf",
+          }
+
+        title = lec['title']
+        if lec['videoURL'] != None:
+          fileName = '{}_{}'.format(lecIdx, title)
+          currLec.append(fileName)
+          directory[week]['{}_{}'.format(topicIdx, topic)][fileName] = {
+            "URL": lec['videoURL'],
+            "type": "url",
+            "prevLec": prevLec,
+            "nextLec": None
+          }
+          if prevLec:
+            directory[prevLec[0]][prevLec[1]][prevLec[2]]["nextLec"] = currLec
+          # Making prev
+          prevLec = currLec
+          currLec = None
+
+        for video in lec['videosUploaded']:
+          if video['type'] == 'original':
+            name = '{}_{}'.format(lecIdx, title) + '.' + video['path'].split('.')[-1]
+            if firstVideo == None:
+              firstVideo = [week, '{}_{}'.format(topicIdx, topic), name]
+            directory[week]['{}_{}'.format(topicIdx, topic)][name] = {
+              "fileName": name,
+              "type": "mp4",
+              "prevLec": prevLec,
+              "nextLec": None
+             }
+            currLec.append(name)
+            # Setting next of previous
+            if prevLec:
+              directory[prevLec[0]][prevLec[1]][prevLec[2]]["nextLec"] = currLec
+            # Making prev
+            prevLec = currLec
+            currLec = None
+
+  return directory, firstVideo
+
+
+## Directory Metadata
+Parsed_Data = {}
+FirstVideos = []
+for course in answers['course_list']:
+  summaryURL = 'https://hello.iitk.ac.in/api/' + course + '/lectures/summary'
+  data = json.loads(r.get(summaryURL, headers={
+    'uid':cookies['uid'],
+    'token':cookies['token'],
+  }).content)
+  # resourceURL = 'https://hello.iitk.ac.in/api/' + course + '/resources'
+  # resourceData = json.loads(r.get(resourceURL, headers={
+  #   'uid':cookies['uid'],
+  #   'token':cookies['token'],
+  # }).content)
+  folder = re.sub(r'[\\\/:*?"<>|]',' - ', courseNames[course])
+    ## Calculating Resources
+
+  temp = []
+  for res in data:
+    toInsert = True
+    for entry in temp:
+      if entry['week'] == res['week']:
+        entry['lectures'].append(res)
+        toInsert = False
+    if toInsert:
+      temp.append({"week" : res['week'], 'lectures': [res]})
+  for entry in temp:
+    lecs = list(entry['lectures'])
+    entry['lectures'] = []
+    for lecture in lecs:
+      topicExists = False
+      for lec_2 in entry['lectures']:
+        if lecture['topic'] == lec_2['topic']:
+          topicExists = True
+          lec_2['lectures'].append(lecture)
+          break
+      if topicExists == False:
+        entry['lectures'].append({
+          "topic": lecture['topic'],
+          "lectures": list([lecture])
+        })
+  metadata, firstVideo = courseDirectoryMetadata(temp, minified=True)
+  if firstVideo == None:
+    print(folder)
+    print('Fucked')
+  else:
+    firstVideo.insert(0, folder)
+    FirstVideos.append(firstVideo)
+  Parsed_Data[folder] = metadata
+
+open('resources.js','w').write('const a={};export default a;'.format(json.dumps(Parsed_Data, sort_keys=True)))
+
+import cv2
+threshold = 100
+os.makedirs(os.path.join('thumbs'), exist_ok=True)
+for f in FirstVideos:
+  vcap = cv2.VideoCapture(os.path.join(*f))
+  res, im_ar = vcap.read()
+  while im_ar.mean() < threshold and res:
+      res, im_ar = vcap.read()
+  im_ar = cv2.resize(im_ar, (480, 270), 0, 0, cv2.INTER_LINEAR)
+  cv2.imwrite(os.path.join('thumbs', '{}.png'.format(f[0])), im_ar)
+  res, thumb_buf = cv2.imencode('.png', im_ar)
+  bt = thumb_buf.tobytes()
+
+from distutils.dir_util import copy_tree
+copy_tree(os.path.dirname(__file__) , os.getcwd())
